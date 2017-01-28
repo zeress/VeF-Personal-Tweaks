@@ -1669,6 +1669,11 @@ country_event = {
 		}
 	}
 	
+	option = {	#Culture Conversion
+		name = "vef_realm.1.optf"
+		country_event = { id = vef_realm.106 }
+	}
+	
 	option = {	#Area Selection
 		name = "vef_realm.1.opty"
 		country_event = { id = vef_realm.999 }
@@ -2295,6 +2300,148 @@ country_event = {
 		clr_country_flag = nat_lserf
 		clr_country_flag = ai_serfdom_up
 		clr_country_flag = ai_serfdom_down
+		country_event = { id = vef_realm.100 }
+	}
+	
+	option = { #Back
+		name = "vef_realm.101.opta"
+		country_event = { id = vef_realm.100 }
+	}
+}
+
+country_event = {
+	id = vef_realm.106
+	title = "vef_realm.12.t"
+	desc = "vef_realm.12.d"
+	picture = VEF_IMPORTANT_STATUE_eventPicture
+	
+	is_triggered_only = yes #vef_realm.100
+	
+	immediate = {
+		if = {
+			limit = { has_province_modifier = rm_encourage_accepted }
+			custom_tooltip = tt_encourage_accepted
+		}
+		if = {
+			limit = { has_province_modifier = rm_promote_culture }
+			custom_tooltip = tt_promote_culture
+		}
+	}
+	
+	option = {	#Promote Culture
+		name = "vef_realm.12.opta"
+		custom_tooltip = tt_promote_action
+		
+		every_owned_province = {
+			if = {
+				limit = {
+					NOT = { has_owner_culture = yes }
+					NOT = { has_owner_accepted_culture = yes }
+					NOT = {
+						any_neighbor_province = {
+							AND = {
+								owned_by = PREV
+								culture_group = PREV
+								has_owner_accepted_culture = yes
+							}
+						}
+					}
+				}
+				add_province_modifier = { name = rm_promote_culture duration = -1 }
+			}
+		}
+		country_event = { id = vef_realm.100 }
+	}
+
+	option = {	#Encourage Accepted
+		name = "vef_realm.12.optb"
+		custom_tooltip = tt_encourage_action
+		
+		every_owned_province = {
+			if = {
+				limit = {
+					NOT = { has_owner_culture = yes }
+					NOT = { has_owner_accepted_culture = yes }
+					any_neighbor_province = {
+						AND = {
+							owned_by = PREV
+							culture_group = PREV
+							has_owner_accepted_culture = yes
+						}
+					}
+				}
+				add_province_modifier = { name = rm_encourage_accepted duration = -1 }
+				if = {
+					limit = { has_province_modifier = rm_promote_culture }
+					remove_province_modifier = rm_promote_culture
+				}
+			}
+		}
+		country_event = { id = vef_realm.100 }
+	}
+	
+	option = {	# Promote if you can't encourage
+		name = "vef_realm.12.optc"
+		custom_tooltip = tt_promote_encourage_action
+		
+		
+		every_owned_province = {
+			if = {
+				limit = {
+					NOT = { has_owner_culture = yes }
+					NOT = { has_owner_accepted_culture = yes }
+					NOT = {
+						any_neighbor_province = {
+							AND = {
+								owned_by = PREV
+								culture_group = PREV
+								has_owner_accepted_culture = yes
+							}
+						}
+					}
+				}
+				add_province_modifier = { name = rm_promote_culture duration = -1 }
+			}
+		}
+		
+		every_owned_province = {
+			if = {
+				limit = {
+					NOT = { has_owner_culture = yes }
+					NOT = { has_owner_accepted_culture = yes }
+					any_neighbor_province = {
+						AND = {
+							owned_by = PREV
+							culture_group = PREV
+							has_owner_accepted_culture = yes
+						}
+					}
+				}
+				add_province_modifier = { name = rm_encourage_accepted duration = -1 }
+				if = {
+					limit = { has_province_modifier = rm_promote_culture }
+					remove_province_modifier = rm_promote_culture
+				}
+			}
+		}
+		country_event = { id = vef_realm.100 }
+	}
+	
+	option = {	#None
+		name = "vef_realm.12.optd"
+		
+		every_owned_province = {
+			limit = {
+				has_province_modifier = rm_encourage_accepted
+			}
+			remove_province_modifier = rm_encourage_accepted
+		}
+		every_owned_province = {
+			limit = {
+				has_province_modifier = rm_promote_culture
+			}
+			remove_province_modifier = rm_promote_culture
+		}
 		country_event = { id = vef_realm.100 }
 	}
 	

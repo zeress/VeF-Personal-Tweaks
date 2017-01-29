@@ -1,0 +1,210 @@
+# VeF - Culture Spread events
+
+namespace = vef_culture
+
+# Maintenance Routine to check culture spread
+
+country_event = {
+	id = vef_culture.1
+	title = "vef_culture.1.t"
+	desc = "vef_culture.1.d"
+
+	picture = VEF_ADMIN_CAPACITY_eventPicture
+
+	hidden = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		# Culture
+		every_owned_province = {
+			limit = {
+				has_owner_culture = no
+				has_owner_accepted_culture = no
+				NOT = {
+					owner = {
+						culture_group = PREV
+						OR = {
+							AND = {
+								has_dlc = "Common Sense"
+								government_rank = 4
+							}
+							AND = {
+								NOT = { has_dlc = "Common Sense" }
+								total_development = 1050
+							}
+						}
+					}
+				}
+			}
+			# Core
+			if = {
+				limit = { is_core = owner }
+				change_variable = { which = culture_spread value = 0.15 }
+			}
+			# Religion
+			if = {
+				limit = { religion = owner }
+				change_variable = { which = culture_spread value = 0.15 }
+			}
+			# Admin ideas speed culture spread
+			if = {
+				limit = { owner = { administrative_ideas = 7 } }
+				change_variable = { which = culture_spread value = 0.075 }
+			}
+			# Reduction if a neighbor has same culture as province
+			if = {
+				limit = { any_neighbor_province = { culture = PREV } }
+				change_variable = { which = culture_spread value = -0.5 }
+			}
+			# Culture Group
+			if = {
+				limit = {
+					culture_group = owner
+				}
+				change_variable = { which = culture_spread value = 0.3 }
+				if = {
+					limit = {
+						has_province_modifier = rm_promote_culture
+					}
+					change_variable = { which = culture_spread value = 0.3 }
+				}
+			}
+			if = {
+				limit = {
+					has_province_modifier = rm_encourage_accepted
+					any_neighbor_province = {
+						owned_by = ROOT
+						culture_group = PREV
+						has_owner_accepted_culture = yes
+					}
+				}
+				change_variable = { which = culture_spread value = 0.3 }
+			}
+			# Buildings
+			if = {
+				limit = {
+					OR = {
+						has_building = courthouse
+						has_building = town_hall
+					}
+				}
+				change_variable = { which = culture_spread value = 0.05 }
+			}
+			# City size
+			trigger_switch = {
+				on_trigger = development
+				30 = { change_variable = { which = culture_spread value = -0.75 } }
+				24 = { change_variable = { which = culture_spread value = -0.6 } }
+				18 = { change_variable = { which = culture_spread value = -0.4 } }
+				12 = { change_variable = { which = culture_spread value = -0.2 } }
+				6 = { change_variable = { which = culture_spread value = -0.1 } }
+			}
+			# Don't allow to go < 0
+			if = {
+				limit = { NOT = { check_variable = { which = culture_spread value = 0 } } }
+				set_variable = { which = culture_spread value = 0 }
+			}
+			# If no neighbor province has owner culture, cap at 10
+			if = {
+				limit = {
+					all_neighbor_province = {
+						has_owner_culture = no
+						OR = {
+							has_owner_accepted_culture = no
+							NOT = { culture_group = PREV }
+						}
+					}
+				}
+				set_variable = { which = culture_spread value = 10 }
+			}
+		}
+	}
+
+	option = {
+		name = "vef_culture.1.opta"
+	}
+}
+
+# Check province to see if Primary Culture Spreads to the province
+
+province_event = {
+	id = vef_culture.2
+	title = "vef_culture.2.t"
+	desc = "vef_culture.2.d"
+
+	picture = VEF_CULTURE_eventPicture
+
+	# Can only spread once it hits the 50% mark
+	trigger = {
+		check_variable = { which = culture_spread value = 50 }
+		has_owner_culture = no
+		has_owner_accepted_culture = no
+		is_city = yes
+		OR = {
+			culture_group = owner
+			any_neighbor_province = {
+				owned_by = ROOT
+				culture_group = ROOT
+				has_owner_accepted_culture = yes
+			}
+		}
+	}
+
+	# modified for culture_spread value, core, religion, provincial government, tolerance policy
+	mean_time_to_happen = {
+		months = 600
+		modifier = { 
+			factor = 0.80
+			is_core = owner
+		}
+		modifier = { 
+			factor = 0.80
+			religion = owner
+		}
+		modifier = {
+			factor = 0.80
+			check_variable = { which = culture_spread value = 75 }
+		}
+		modifier = {
+			factor = 0.80
+			check_variable = { which = culture_spread value = 90 }
+		}
+		modifier = { # Tolerance Policy Finisher
+			factor = 0.50
+			owner = { has_active_policy = vef_tolerancef }
+		}
+	}
+
+	immediate = { 
+		hidden_effect = {
+			set_variable = { which = culture_spread value = 0 }
+		}
+	}
+
+	option = {
+		name = "vef_culture.2.opta"
+		if = {
+			limit = { culture_group = owner }
+			change_culture = owner
+		}
+		if = {
+			limit = {
+				NOT = { culture_group = owner }
+				any_neighbor_province = {
+					owned_by = ROOT
+					culture_group = ROOT
+					has_owner_accepted_culture = yes
+				}
+			}
+			random_neighbor_province = {
+				limit = {
+					owned_by = ROOT
+					culture_group = ROOT
+					has_owner_accepted_culture = yes
+				}
+				ROOT = { change_culture = PREV }
+			}
+		}
+	}
+}

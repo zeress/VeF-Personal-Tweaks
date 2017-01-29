@@ -2350,7 +2350,7 @@ country_event = {
 				add_province_modifier = { name = rm_promote_culture duration = -1 }
 			}
 		}
-		country_event = { id = vef_realm.100 }
+		country_event = { id = vef_realm.106 }
 	}
 
 	option = {	#Encourage Accepted
@@ -2377,7 +2377,7 @@ country_event = {
 				}
 			}
 		}
-		country_event = { id = vef_realm.100 }
+		country_event = { id = vef_realm.106 }
 	}
 	
 	option = {	# Promote if you can't encourage
@@ -2436,7 +2436,7 @@ country_event = {
 				}
 			}
 		}
-		country_event = { id = vef_realm.100 }
+		country_event = { id = vef_realm.106 }
 	}
 	
 	option = {	#None
@@ -2454,7 +2454,7 @@ country_event = {
 			}
 			remove_province_modifier = rm_promote_culture
 		}
-		country_event = { id = vef_realm.100 }
+		country_event = { id = vef_realm.106 }
 	}
 	
 	option = { #Back

@@ -83,13 +83,16 @@ country_event = {
 			}
 			# Buildings
 			if = {
-				limit = {
-					OR = {
-						has_building = courthouse
-						has_building = town_hall
-					}
-				}
+				limit = { has_building = sheriffs_office }
 				change_variable = { which = culture_spread value = 0.05 }
+			}
+			if = {
+				limit = { has_building = courthouse }
+				change_variable = { which = culture_spread value = 0.075 }
+			}
+			if = {
+				limit = { has_building = town_hall }
+				change_variable = { which = culture_spread value = 0.1 }
 			}
 			# City size
 			trigger_switch = {

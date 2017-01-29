@@ -50,7 +50,7 @@ country_event = {
 			# Admin ideas speed culture spread
 			if = {
 				limit = { owner = { administrative_ideas = 7 } }
-				change_variable = { which = culture_spread value = 0.075 }
+				change_variable = { which = culture_spread value = 0.15 }
 			}
 			# Reduction if a neighbor has same culture as province
 			if = {
@@ -62,12 +62,12 @@ country_event = {
 				limit = {
 					culture_group = owner
 				}
-				change_variable = { which = culture_spread value = 0.3 }
+				change_variable = { which = culture_spread value = 0.6 }
 				if = {
 					limit = {
 						has_province_modifier = rm_promote_culture
 					}
-					change_variable = { which = culture_spread value = 0.3 }
+					change_variable = { which = culture_spread value = 0.6 }
 				}
 			}
 			if = {
@@ -79,7 +79,7 @@ country_event = {
 						has_owner_accepted_culture = yes
 					}
 				}
-				change_variable = { which = culture_spread value = 0.3 }
+				change_variable = { which = culture_spread value = 0.6 }
 			}
 			# Buildings
 			if = {

@@ -1,0 +1,30 @@
+#	Example:
+# 
+#	example_trigger = {
+#		tag = SWE
+#		ai = no
+#	}
+#
+#
+#	In a script file:
+#
+#	trigger = {
+#		example_trigger = yes
+#	}
+#
+
+owner_in_cultural_union_w_prev = {
+	owner = {
+		culture_group = PREV
+		OR = {
+			AND = {
+				has_dlc = "Common Sense"
+				government_rank = 4
+			}
+			AND = {
+				NOT = { has_dlc = "Common Sense" }
+				total_development = 1050
+			}
+		}
+	}
+}
